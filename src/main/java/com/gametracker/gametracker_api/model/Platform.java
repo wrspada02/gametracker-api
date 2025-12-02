@@ -1,8 +1,11 @@
 package com.gametracker.gametracker_api.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Platform {
@@ -12,8 +15,9 @@ public class Platform {
 
     private String nome;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "platforms")
-    private Set<Game> games = new HashSet<>();
+    private final Set<Game> games = new HashSet<>();
 
     public Platform() {}
 
@@ -23,4 +27,9 @@ public class Platform {
 
     public void setId(Long id) { this.id = id; }
     public void setNome(String nome) { this.nome = nome; }
+
+    @JsonProperty("games")
+    public Set<Long> getGameIds() {
+        return games.stream().map(Game::getId).collect(Collectors.toSet());
+    }
 }

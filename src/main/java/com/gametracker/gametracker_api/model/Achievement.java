@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class Achievement {
@@ -16,6 +18,7 @@ public class Achievement {
     private String nome;
     private String descricao;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
@@ -31,4 +34,9 @@ public class Achievement {
     public void setNome(String nome) { this.nome = nome; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public void setGame(Game game) { this.game = game; }
+
+    @JsonProperty("gameId")
+    public Long getGameId() {
+        return game != null ? game.getId() : null;
+    }
 }
